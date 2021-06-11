@@ -1,16 +1,76 @@
+import axios from 'axios'
+
+
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
 
-/*
-  STEP 2: Inspect and study the data coming back, this is YOUR
-    github info! You will need to understand the structure of this
-    data in order to use it to build your component function
+const container = document.querySelector('.cards')
 
-    Skip to STEP 3.
-*/
+axios.get('https://api.github.com/users/edurazo12')
+.then((res) => {
+  const myData = res.data
+    container.appendChild(cardMaker(myData))
+})
+
+
+const followersArray = ['tetodan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell']
+
+  followersArray.forEach(data => {
+    axios.get(`https://api.github.com/users${data}`)
+    .then((res) => {
+      const newData = res.data
+      container.appendChild(cardMaker(newData))
+    })
+  })
+
+  const entryPoint = document.querySelector('div.cards')
+    function cardMaker({avatar_url, name, login, location, html_url, followers, following, bio}) {
+      const card = document.createElement('div')
+      const avatar = document.createElement('img')
+      const cardInfo = document.createElement('div')
+      const fullName = document.createElement('h3')
+      const userName = document.createElement('p')
+      const locations = document.createElement('p')
+      const profile = document.createElement('p')
+      const address = document.createElement('a')
+      const followerCount = document.createElement('p')
+      const followingCount = document.createElement('p')
+      const fullBio = document.createElement('p')
+
+      card.classList.add('card')
+      avatar.src = avatar_url
+      cardInfo.classList.add('card-info')
+      fullName.classList.add('name')
+      fullName.textContent = `${name}`
+      userName.classList.add('username')
+      userName.textContent = `${login}`
+      locations.textContent = `Location: ${location}`
+      profile.textContent = 'Profile:'
+      address.src = html_url
+      followerCount.textContent =  `${bio}`
+
+      card.appendChild(avatar)
+      card.appendChild(cardInfo)
+      cardInfo.appendChild(fullName)
+      cardInfo.appendChild(userName)
+      cardInfo.appendChild(locations)
+      cardInfo.appendChild(profile)
+      profile.appendChild(address)
+      cardInfo.appendChild(followerCount)
+      cardInfo.appendChild(followingCount)
+      cardInfo.appendChild(fullBio)
+
+      return card
+    }
+
+
+
+
+
 
 /*
   STEP 4: Pass the data received from Github into your function,
@@ -28,7 +88,7 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
